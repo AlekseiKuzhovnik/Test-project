@@ -1,0 +1,61 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    {% if events %}
+    <p>Список ваших мероприятий:</p>
+    {% elif not user.is_authenticated %}
+    <p>Сперва необходимо авторизоваться.</p>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a href="/login/">Войти</a>
+        </small>
+    </div>
+    <div class="border-top pt-3">
+            <small class="text-muted">
+                Нужен аккаунт?  <a class="ml-2" href="/register/">Регистрация</a>
+            </small>
+    </div>
+    {% else %}
+    <p>У вас еще нет созданных мероприятий.</p>
+    <br>
+<a href="{% url 'create_event' %}" class="btn btn-outline-info mb-4 mr-1">Создать первое мероприятие</a>
+    {% endif %}
+
+  {% for ev in events %}
+    {% for event in ev %}
+        <article class="media content-section">
+          <div class="media-body">
+            <div class="media">
+                <img class="rounded-circle article-img" src="{{ event.image.url }}">
+                <div class="media-body"><h2><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.event_name }}</a></h2></div>
+            </div>
+            <p class="article-content">{{ event.short_description }}</p>
+              {% if event.start_date and event.start_date|date:"F d, Y" == event.end_date|date:"F d, Y" %}
+                 <div>
+                  <small class="text-muted">Дата мероприятия: {{ event.start_date|date:"F d, Y" }}</small>
+                 </div>
+              {% elif event.start_date %}
+                  <div>
+                  <small class="text-muted">Дата начала: {{ event.start_date|date:"F d, Y" }}</small>
+                  </div>
+              {% endif %}
+
+              {% if event.end_date and event.start_date|date:"F d, Y" != event.end_date|date:"F d, Y" %}
+                  <div>
+                  <small class="text-muted">Дата завершения: {{ event.end_date|date:"F d, Y" }}</small>
+                  </div>
+              {% endif %}
+          </div>
+        </article>
+    {% endfor %}
+  {% endfor %}
+{% endblock content %}
+
+{% block content2 %}
+    <div class="navbar-nav">
+      {% if user.is_authenticated and events %}
+        <a href="{% url 'create_event' %}" class="
+                    btn btn-primary">Создать мероприятие</a>
+      {% endif %}
+    </div>
+{% endblock content2 %}

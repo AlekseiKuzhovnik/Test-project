@@ -19,10 +19,10 @@ from django.conf import settings
 from django.conf.urls.static import static
 from users import views as user_views
 from elists import views as elists_views
-from elists.views import (
-    EventDetailView,
-UserEventListView
-)
+# from elists.views import (
+#     EventDetailView,
+# UserEventListView
+# )
 
 
 urlpatterns = [
@@ -33,8 +33,9 @@ urlpatterns = [
     path('login/', auth_views.LoginView.as_view(template_name='users/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('create_event/', elists_views.create_event, name='create_event'),
-    path('elists/<int:pk>/', EventDetailView.as_view(), name='event-detail'),
-    path('user/<str:username>', UserEventListView.as_view(), name='user-events'),
+    path('elists/<int:pk>/', elists_views.EventDetail, name='event_detail'),
+    path('elists/delete_event/<int:pk>/', elists_views.EventDelete, name='event_delete'),
+    # path('user/<str:username>', UserEventListView.as_view(), name='user-events'),
     path('', include('blog.urls')),
 ]
 

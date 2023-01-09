@@ -27,7 +27,7 @@
           <div class="media-body">
             <div class="media">
                 <img class="rounded-circle article-img" src="{{ event.image.url }}">
-                <div class="media-body"><h2><a class="article-title" href="{% url 'event-detail' event.id %}">{{ event.event_name }}</a></h2></div>
+                <div class="media-body"><h2><a class="article-title" href="{% url 'event_detail' event.id %}">{{ event.event_name }}</a></h2></div>
             </div>
             <p class="article-content">{{ event.short_description }}</p>
               {% if event.start_date and event.start_date|date:"F d, Y" == event.end_date|date:"F d, Y" %}

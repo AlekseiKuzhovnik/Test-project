@@ -1,5 +1,6 @@
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
+{% load widget_tweaks %}
 {% block content %}
 <!--        <form action="process/form/" method="post">-->
 
@@ -20,11 +21,13 @@
 
 <!--            <input type="submit">-->
 
-<!--        </form>-->
+        </form>
     <legend class="border-bottom mb-4">Новое мероприятие</legend>
-    <form method="POST" class="post-form" enctype="multipart/form-data">
+    <form method="POST" class="form-group" enctype="multipart/form-data">
         {% csrf_token %}
-        {{ form.as_ul }}
-        <button type="submit" class="btn btn-outline-info">Save</button>
+        {{ form }}
+        <br>
+        <button type="submit" class="btn btn-outline-info">Создать</button>
     </form>
+
 {% endblock content %}

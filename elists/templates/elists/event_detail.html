@@ -1,0 +1,43 @@
+{% extends "blog/base.html" %}
+{% block content %}
+  <article class="media content-section">
+    <img class="rounded-circle article-img" src="{{ event.image.url }}">
+    <div class="media-body">
+      <div class="article-metadata">
+        <a class="mr-2" href="{% url 'event_detail' event.event_creator_id %}">{{ user_name.username }}</a>
+        <small class="text-muted">{{ event.create_date|date:"F d, Y" }}</small>
+
+      </div>
+      <h2 class="article-title">{{ event.event_name }}</h2>
+      <p class="article-content">{{ event.short_description }}</p>
+      <p class="article-content">{{ event.full_description }}</p>
+      {% if event.start_date and event.start_date|date:"F d, Y" == event.end_date|date:"F d, Y" %}
+         <div>
+          <small class="text-muted">Дата мероприятия: {{ event.start_date|date:"F d, Y" }}</small>
+         </div>
+      {% elif event.start_date %}
+          <div>
+          <small class="text-muted">Дата начала: {{ event.start_date|date:"F d, Y" }}</small>
+          </div>
+      {% endif %}
+
+      {% if event.end_date and event.start_date|date:"F d, Y" != event.end_date|date:"F d, Y" %}
+          <div>
+          <small class="text-muted">Дата завершения: {{ event.end_date|date:"F d, Y" }}</small>
+          </div>
+      {% endif %}
+    </div>
+  </article>
+{% endblock content %}
+
+{% block content2 %}
+    <div class="navbar-nav">
+      {% if user.is_authenticated and event %}
+        <a href="{% url 'create_event' %}" class="
+                    btn btn-primary">Создать новое мероприятие</a>
+        <br>
+        <a href="{% url 'event_delete' event.id %}" class="
+                    btn btn-primary">Удалить текущее мероприятие</a>
+      {% endif %}
+    </div>
+{% endblock %}

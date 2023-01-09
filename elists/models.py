@@ -10,8 +10,8 @@ class Event(models.Model):
     full_description = models.TextField(max_length=1000, blank=True)
     event_creator_id = models.TextField(max_length=10, default=0)
     create_date = models.DateTimeField(default=datetime.now, blank=True, null=False)
-    start_date = models.DateTimeField(blank=True, null=True)
-    end_date = models.DateTimeField(blank=True, null=True)
+    start_date = models.DateTimeField(blank=True)
+    end_date = models.DateTimeField(blank=True)
     is_closed = models.IntegerField(default=0)
     image = models.ImageField(default='default.jpg', upload_to='event_pics')
 

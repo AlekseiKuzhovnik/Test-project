@@ -4,8 +4,9 @@
     <img class="rounded-circle article-img" src="{{ event.image.url }}">
     <div class="media-body">
       <div class="article-metadata">
-        <a class="mr-2" href="{% url 'event_detail' event.event_creator_id %}">{{ user_name.username }}</a>
-        <small class="text-muted">{{ event.create_date|date:"F d, Y" }}</small>
+          <small class="text-muted">Создано: </small>
+        <a class="mr-2" href="{% url 'profile' %}">{{ user_name.username }}</a>
+        <small class="text-muted">Дата создания: {{ event.create_date|date:"F d, Y" }}</small>
 
       </div>
       <h2 class="article-title">{{ event.event_name }}</h2>
@@ -35,6 +36,12 @@
       {% if user.is_authenticated and event %}
         <a href="{% url 'create_event' %}" class="
                     btn btn-primary">Создать новое мероприятие</a>
+        <br>
+        <a href="{% url 'event_update' event.id %}" class="
+                    btn btn-primary">Изменить описание</a>
+        <br>
+        <a href="{% url 'event_update_image' event.id %}" class="
+                    btn btn-primary">Изменить изображение</a>
         <br>
         <a href="{% url 'event_delete' event.id %}" class="
                     btn btn-primary">Удалить текущее мероприятие</a>

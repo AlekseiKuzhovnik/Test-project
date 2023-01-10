@@ -1,0 +1,17 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    </form>
+        <legend class="border-bottom mb-4">Обновление изображения</legend>
+        <form method="POST" class="form-group" enctype="multipart/form-data">
+            {% csrf_token %}
+        {% for field in form %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field.label_tag }} {{ field }}
+            </div>
+        {% endfor %}
+        <br>
+        <button type="submit" class="btn btn-outline-info">Обновить</button>
+        <a class="btn btn-outline-secondary" href="{% url 'event_detail' event.id %}">Отмена</a>
+    </form>
+{% endblock content %}

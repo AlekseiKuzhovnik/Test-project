@@ -4,14 +4,14 @@ from django.utils import timezone
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404
-from .forms import CreateEvent
-from django.views.generic import (
-    ListView,
-    DetailView,
-    CreateView,
-    UpdateView,
-    DeleteView
-)
+from .forms import CreateEvent, UpdateEvent, UpdateImageEvent
+# from django.views.generic import (
+#     ListView,
+#     DetailView,
+#     CreateView,
+#     UpdateView,
+#     DeleteView
+# )
 
 
 def elists(request):
@@ -66,22 +66,71 @@ def create_event(request):
     return render(request, 'elists/create_event.html', {'form': form})
 
 
-def EventDetail(request, pk):
-    # context = {}
-    # return render(request, 'event_detail.html', context)
-
-    # try:
-    #     event_inf = Event.objects.get(pk=pk)
-    # except Event.DoesNotExist:
-    #     raise Http404("Event does not exist")
-
+def event_detail(request, pk):
     event_inf = get_object_or_404(Event, pk=pk)
     user_name = User.objects.get(id=event_inf.event_creator_id)
-
     return render(request, 'elists/event_detail.html', context={'event': event_inf, 'user_name': user_name})
 
 
-def EventDelete(request, pk):
+def event_update(request, pk):
+    if request.method == 'POST':
+        form = UpdateEvent(request.POST, request.FILES)
+        if form.is_valid():
+            event_inf = get_object_or_404(Event, pk=pk)
+            event = Event()
+            event.id = event_inf.id
+            event.event_name = form.data['event_name']
+            event.short_description = form.data['short_description']
+            event.full_description = form.data['full_description']
+            event.create_date = event_inf.create_date
+            event.event_creator_id = event_inf.event_creator_id
+            event.image = event_inf.image
+            event.is_closed = event_inf.is_closed
+            event.start_date = form.data['start_date']
+            event.end_date = form.data['end_date']
+            event.save()
+            return redirect('event_detail', pk=event.id)
+    else:
+        event_inf = get_object_or_404(Event, pk=pk)
+        user_name = User.objects.get(id=event_inf.event_creator_id)
+        form = UpdateEvent()
+        form.initial['event_name'] = event_inf.event_name
+        form.initial['short_description'] = event_inf.short_description
+        form.initial['full_description'] = event_inf.full_description
+        form.initial['start_date'] = event_inf.start_date
+        form.initial['end_date'] = event_inf.end_date
+
+        return render(request, 'elists/event_update.html', {'form': form, 'event': event_inf})
+
+
+def event_update_image(request, pk):
+    if request.method == 'POST':
+        form = UpdateImageEvent(request.POST, request.FILES)
+        if form.is_valid():
+            event_inf = get_object_or_404(Event, pk=pk)
+            event = Event()
+            event.id = event_inf.id
+            event.event_name = event_inf.event_name
+            event.short_description = event_inf.short_description
+            event.full_description = event_inf.full_description
+            event.create_date = event_inf.create_date
+            event.event_creator_id = event_inf.event_creator_id
+            event.image = form.files['image']
+            event.is_closed = event_inf.is_closed
+            event.start_date = event_inf.start_date
+            event.end_date = event_inf.end_date
+            event.save()
+            return redirect('event_detail', pk=event.id)
+    else:
+        event_inf = get_object_or_404(Event, pk=pk)
+        # user_name = User.objects.get(id=event_inf.event_creator_id)
+        form = UpdateImageEvent()
+        # form.initial['image'] = event_inf.image
+
+        return render(request, 'elists/event_update_image.html', {'form': form, 'event': event_inf})
+
+
+def event_delete(request, pk):
     event_inf = Event.objects.get(id=pk)
     event_user = EventUser.objects.filter(event_id=event_inf.id)
     if request.method == "POST":
@@ -92,13 +141,10 @@ def EventDelete(request, pk):
         event_inf.delete()
         return redirect('elists')
     else:
-        print(event_user[0].user_id)
-        # for i in event_user:
-        #     print(i.user_id)
-        print(request.user.id)
         if int(event_user[0].user_id) == int(request.user.id):
             event_inf = get_object_or_404(Event, pk=pk)
             # user_name = User.objects.get(id=event_inf.event_creator_id)
             return render(request, 'elists/event_delete.html', context={'event': event_inf, 'user_name': request.user.id})
         else:
             return redirect('elists')
+

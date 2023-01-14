@@ -6,42 +6,89 @@
       <div class="article-metadata">
           <small class="text-muted">Создано: </small>
         <a class="mr-2" href="{% url 'profile' %}">{{ user_name.username }}</a>
-        <small class="text-muted">Дата создания: {{ event.create_date|date:"F d, Y" }}</small>
+        <small class="text-muted">Дата создания: {{ event.create_date|date:"F d, Y H:i" }}</small>
 
       </div>
       <h2 class="article-title">{{ event.event_name }}</h2>
       <p class="article-content">{{ event.short_description }}</p>
       <p class="article-content">{{ event.full_description }}</p>
-      {% if event.start_date and event.start_date|date:"F d, Y" == event.end_date|date:"F d, Y" %}
+      {% if event.start_date and event.start_date|date:"F d, Y H:i" == event.end_date|date:"F d, Y H:i" %}
          <div>
-          <small class="text-muted">Дата мероприятия: {{ event.start_date|date:"F d, Y" }}</small>
+          <small class="text-muted">Дата мероприятия: {{ event.start_date|date:"F d, Y H:i" }}</small>
          </div>
       {% elif event.start_date %}
           <div>
-          <small class="text-muted">Дата начала: {{ event.start_date|date:"F d, Y" }}</small>
+          <small class="text-muted">Дата начала: {{ event.start_date|date:"F d, Y H:i" }}</small>
           </div>
       {% endif %}
 
-      {% if event.end_date and event.start_date|date:"F d, Y" != event.end_date|date:"F d, Y" %}
+      {% if event.end_date and event.start_date|date:"F d, Y H:i" != event.end_date|date:"F d, Y H:i" %}
           <div>
-          <small class="text-muted">Дата завершения: {{ event.end_date|date:"F d, Y" }}</small>
+          <small class="text-muted">Дата завершения: {{ event.end_date|date:"F d, Y H:i" }}</small>
           </div>
       {% endif %}
     </div>
   </article>
+
+
+{% if plan %}
+      <article class="media content-section">
+            <div class="media-body">
+                <br>
+    {% for pl in plan %}
+      <article class="media content-section">
+            <div class="media-body">
+              <h4>{{ pl.plan_name }}</h4>
+                {% if pl.plan_short_description %}
+                <p class="article-content">{{ pl.plan_short_description }}</p>
+                {% endif %}
+
+                {% if pl.plan_full_description %}
+                <p class="article-content">{{ pl.plan_full_description }}</p>
+                {% endif %}
+
+              {% if pl.start_date %}
+                  <div>
+                  <small class="text-muted">Начало: {{ pl.start_date|date:"F d, Y H:i" }}</small>
+                  </div>
+              {% endif %}
+
+              {% if pl.end_date %}
+                  <div>
+                  <small class="text-muted">Конец: {{ pl.end_date|date:"F d, Y H:i" }}</small>
+                  </div>
+              {% endif %}
+            <a href="{% url 'update_event_plan' pl.id %}" class="btn btn-outline-info"
+               style="margin-top: 10px;">Изменить</a>
+            <a href="{% url 'delete_event_plan' pl.id %}" class="btn btn-outline-secondary"
+               style="margin-left: 10px; margin-top: 10px;">Удалить</a>
+          {% if pl.priority > 0 %}
+            <a href="{% url 'event_up_priority_plan' pl.id %}" class="btn btn-outline-secondary"
+               style="margin-left: 10px; margin-top: 10px;">Up</a>
+          {% endif %}
+          {% if pl.priority != max_priority %}
+               <a href="{% url 'event_down_priority_plan' pl.id %}" class="btn btn-outline-secondary"
+               style="margin-left: 10px; margin-top: 10px;">Down</a>
+          {% endif %}
+            </div>
+      </article>
+    {% endfor %}
+            </div>
+      </article>
+{% endif %}
 {% endblock content %}
 
 {% block content2 %}
     <div class="navbar-nav">
       {% if user.is_authenticated and event %}
-        <a href="{% url 'create_event' %}" class="
-                    btn btn-primary">Создать новое мероприятие</a>
-        <br>
         <a href="{% url 'event_update' event.id %}" class="
                     btn btn-primary">Изменить описание</a>
         <br>
         <a href="{% url 'event_update_image' event.id %}" class="
                     btn btn-primary">Изменить изображение</a>
+        <br>
+        <a href="{% url 'create_event_plan' event.id %}" class="
+                    btn btn-primary">Добавить пункт плана</a>
         <br>
         <a href="{% url 'event_delete' event.id %}" class="
                     btn btn-primary">Удалить текущее мероприятие</a>

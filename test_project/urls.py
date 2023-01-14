@@ -37,6 +37,11 @@ urlpatterns = [
     path('elists/delete_event/<int:pk>/', elists_views.event_delete, name='event_delete'),
     path('elists/update_event/<int:pk>/', elists_views.event_update, name='event_update'),
     path('elists/update_event_image/<int:pk>/', elists_views.event_update_image, name='event_update_image'),
+    path('create_event_plan/<int:pk>/', elists_views.create_event_plan, name='create_event_plan'),
+    path('update_event_plan/<int:pk>/', elists_views.event_update_plan, name='update_event_plan'),
+    path('delete_event_plan/<int:pk>/', elists_views.event_delete_plan, name='delete_event_plan'),
+    path('elists/up_priority_plan/<int:pk>/', elists_views.event_up_priority_plan, name='event_up_priority_plan'),
+    path('elists/down_priority_plan/<int:pk>/', elists_views.event_down_priority_plan, name='event_down_priority_plan'),
     # path('user/<str:username>', UserEventListView.as_view(), name='user-events'),
     path('', include('blog.urls')),
 ]

@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    </form>
+        <legend class="border-bottom mb-4">Добавление нового пункта плана</legend>
+        <form method="POST" class="form-group">
+            {% csrf_token %}
+            {{ form }}
+        <br>
+        <button type="submit" class="btn btn-outline-info">Создать</button>
+    </form>
+{% endblock content %}

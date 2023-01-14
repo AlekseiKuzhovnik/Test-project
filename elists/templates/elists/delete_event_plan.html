@@ -5,11 +5,11 @@
             {% csrf_token %}
             <fieldset class="form-group">
                 <legend class="border-bottom mb-4">Удаление события</legend>
-                <h2>Вы уверены, что хотите удалить это событие "{{ event.event_name }}"?</h2>
+                <h2>Вы уверены, что хотите удалить это событие "{{ plan.plan_name }}"?</h2>
             </fieldset>
             <div class="form-group">
                 <button type="submit" class="btn btn-outline-danger">Да, хочу удалить</button>
-                <a class="btn btn-outline-secondary" href="{% url 'event_detail' event.id %}">Отмена</a>
+                <a class="btn btn-outline-secondary" href="{% url 'event_detail' plan.event_id %}">Отмена</a>
             </div>
         </form>
     </div>

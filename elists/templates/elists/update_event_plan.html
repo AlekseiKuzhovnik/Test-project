@@ -1,0 +1,12 @@
+{% extends "blog/base.html" %}
+{% block content %}
+    </form>
+        <legend class="border-bottom mb-4">Обновление описания плана</legend>
+        <form method="POST" class="form-group" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <br>
+        <button type="submit" class="btn btn-outline-info">Обновить</button>
+            <a class="btn btn-outline-secondary" href="{% url 'event_detail' plan.event_id %}">Отмена</a>
+    </form>
+{% endblock content %}
